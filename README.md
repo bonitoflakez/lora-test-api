@@ -35,4 +35,11 @@ gradio app.py
 ### ToDo
 
 - [x] **Ensure Unique Seed for Each Image Generation:** Implement a mechanism to generate a unique seed for each image generation process. This can be achieved by using the current timestamp, a counter, or any other method that ensures each seed is unique and different for each image. This ensures that each generated image is completely different from the others, even if the seed values are close.
-- [ ] Parse prompt input through a string
+- [x] Parse prompt input through a string
+- [ ] Write a basic server API to send prompt through API routes and get response image
+- [ ] Write a basic web-app to take prompt and display response image
+
+#### Bot connectivity
+
+- [ ] Get user prompt and send to API route
+- [ ] Respond with image to user that requested image
