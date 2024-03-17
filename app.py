@@ -11,11 +11,6 @@ load_dotenv()
 PROMPT_URL = os.getenv('PROMPT_URL')
 COMFY_OUTPUT_DIR = os.getenv('COMFY_OUTPUT_DIR')
 
-"""
-TODO
-- do the seed cache thingy to check for newly generated images
-"""
-
 # get generated image and display on gradio
 def get_latest_image(folder):
 	files = os.listdir(folder)
@@ -31,24 +26,33 @@ def start_queue(prompt_workflow):
 	requests.post(PROMPT_URL, data=queue_data)
 
 # generate image using workflow
-def generate_image():
-	with open("utils/workflow_api.json", "r") as workflow_config:
-		workflow_prompt = json.load(workflow_config)
+def generate_image(user_prompt):
+    with open("utils/workflow_api.json", "r") as workflow_config:
+        workflow_prompt = json.load(workflow_config)
 
-	# check for any previously generated image
-	prev_image = get_latest_image(COMFY_OUTPUT_DIR)
+    # Generate a unique seed for each image generation
+    unique_seed = int(time.time() * 1000) # Using current timestamp in milliseconds
 
-	start_queue(workflow_prompt)
+    # Modify the workflow_prompt to include the unique_seed
+    workflow_prompt['3']['inputs']['seed'] = unique_seed
 
-	while True:
-		latest_image = get_latest_image(COMFY_OUTPUT_DIR)
-		if latest_image != prev_image:
-			return latest_image
+    final_prompt = "miranowhere " + user_prompt
 
-		time.sleep(1)
+    # add custom user prompt
+    workflow_prompt['6']['inputs']['text'] = final_prompt
 
-# print(workflow_data)
+    # check for any previously generated image
+    prev_image = get_latest_image(COMFY_OUTPUT_DIR)
 
-demo = gr.Interface(fn=generate_image, inputs=[], outputs=["image"])
+    start_queue(workflow_prompt)
+
+    while True:
+        latest_image = get_latest_image(COMFY_OUTPUT_DIR)
+        if latest_image != prev_image:
+            return latest_image
+
+        time.sleep(1)
+
+demo = gr.Interface(fn=generate_image, inputs=["text"], outputs=["image"])
 
 demo.launch()
