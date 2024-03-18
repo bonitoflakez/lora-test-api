@@ -27,7 +27,7 @@ def start_queue(prompt_workflow):
 
 # generate image using workflow
 def generate_image(user_prompt):
-    with open("utils/workflow_api.json", "r") as workflow_config:
+    with open("utils/workflow_api_1.json", "r") as workflow_config:
         workflow_prompt = json.load(workflow_config)
 
     # Generate a unique seed for each image generation
