@@ -7,7 +7,7 @@
 #### Requirements
 
 ```sh
-python3 -m pip install requests Pillow gradio python-dotenv
+python3 -m pip install requests Flask Pillow gradio python-dotenv
 ```
 
 Sample `.env`
